@@ -4,7 +4,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
  
-import 'dart:convert';
 import 'dart:math';
 import 'dart:core';
 import 'dart:developer' as developer;
@@ -204,7 +203,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
     conference = await dolbyioCommsSdk.conference.join(conference, joinOptions);
 
     // Check the conference status
-    if (conference.status == ConferenceStatus.JOINED) {
+    if (conference.status == ConferenceStatus.joined) {
       setState(() => isJoining = false);
       developer.log('Joined to conference.');
     } else {
@@ -216,7 +215,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
   Future<void> leaveConference() async {
     setState(() => isLeaving = true);
 
-    await dolbyioCommsSdk.conference.leave(null);
+    await dolbyioCommsSdk.conference.leave(options: null);
     
     setState(() => isInitializedList = true);
     setState(() => isLeaving = true);
