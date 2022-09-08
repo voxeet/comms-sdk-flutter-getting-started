@@ -8,7 +8,15 @@ This guide explains how to create a basic **audio-only** conference application 
 
 > Currently, this guide explains how to create an audio-only conference application. Instructions for implementing video will be added in the future."
 
-The application lets you create, join, and leave the conference with enabled audio. You can also see the participants list.
+The application lets you create, join, and leave the conference with enabled audio. You can also see the participants list. The final application will look like the following: 
+
+<p align="center">
+<img src="/assets/flutter-getting-started-join.png" alt="Dolby.io Flutter Application" title="Flutter-Getting-Started-Join" width="200"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="/assets/flutter-getting-started-in-conference.png" alt="Dolby.io Flutter Application" title="Flutter-Getting-Started-in-Conference" width="200"/>
+</p>
+
+
 
 # Prerequisites
 
