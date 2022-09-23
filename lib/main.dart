@@ -36,13 +36,14 @@ class _FlutterScreenState extends State<FlutterScreen> {
   bool isJoining = false;
   bool isInitializedList = false;
 
-  StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
-      onParticipantsChangeSubscription;
-  StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>?
-      onStreamsChangeSubscription;
-
   // Step 7: Store the participants list here
   List<Participant> participants = [];
+
+  // Step 7: Define StreamSubscriptions here
+  StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
+    onParticipantsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>?
+    onStreamsChangeSubscription;
  
   @override
   void initState() {
@@ -60,8 +61,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
 
     // Step 4: Call openSession()
     openSession();
- 
-    // Step 7: Call updateParticipantsList()
+
+    // Step 7: Call updateParticipantsList() with StreamSubscriptions
     onParticipantsChangeSubscription =
         dolbyioCommsSdk.conference.onParticipantsChange().listen((params) {
           updateParticipantsList();
@@ -73,6 +74,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
     });
   }
 
+  // Step 7: Cancel StreamSubscriptions
   @override
   void dispose() {
     onParticipantsChangeSubscription?.cancel();
