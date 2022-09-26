@@ -4,7 +4,7 @@
 
 The Flutter SDK is a part of the [Beta Program](https://docs.dolby.io/communications-apis/docs/overview-beta-programs).
 
-This guide explains how to create a basic **audio and video** conference application for mobile devices using the Dolby.io Communications SDK for Flutter. This starter project provides the foundation upon which you can add additional features as you build out your own solutions for events, collaboration, education, or live streaming. 
+This guide explains how to create a basic audio and video conference application for mobile devices using the Dolby.io Communications SDK for Flutter. This starter project provides the foundation upon which you can add additional features as you build out your own solutions for events, collaboration, education, or live streaming. 
 
 The application lets you create, join, and leave the conference with enabled audio and video. You can also see the participants list. The final application will look like the following: 
 
@@ -35,7 +35,7 @@ For more information about iOS SDK and Android SDK requirements, see the [Suppor
 
 # Build the application
 
-Each step in this guide focuses on an important component of a basic **audio and video** conference application. You can either follow along by starting from the boiler plate code in the root of the project or start with the final full source code listing and read the explanations below to understand how it works.
+Each step in this guide focuses on an important component of a basic conference application. You can either follow along by starting from the boiler plate code in the root of the project or start with the final full source code listing and read the explanations below to understand how it works.
 
 ## 0. Create a new project
 
@@ -479,8 +479,7 @@ Expanded(
 ),
 ```
 
-After joining a conference, the application must listen to changes on the list of participants to update the UI. 
-To listen to changes define the **onParticipantsChangeSubscription** and **onStreamsChangeSubscription** in the **initState()** method:
+After joining a conference, the application must listen to changes on the list of participants to update the UI. To listen to the changes, define the **onParticipantsChangeSubscription** and **onStreamsChangeSubscription** in the **initState()** method:
 
 ```dart
 // Step 7: Define StreamSubscriptions
