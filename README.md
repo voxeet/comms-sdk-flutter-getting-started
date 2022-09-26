@@ -4,16 +4,14 @@
 
 The Flutter SDK is a part of the [Beta Program](https://docs.dolby.io/communications-apis/docs/overview-beta-programs).
 
-This guide explains how to create a basic **audio-only** conference application for mobile devices using the Dolby.io Communications SDK for Flutter. This starter project provides the foundation upon which you can add additional features as you build out your own solutions for events, collaboration, education, or live streaming. 
+This guide explains how to create a basic audio and video conference application for mobile devices using the Dolby.io Communications SDK for Flutter. This starter project provides the foundation upon which you can add additional features as you build out your own solutions for events, collaboration, education, or live streaming. 
 
-> Currently, this guide explains how to create an audio-only conference application. Instructions for implementing video will be added in the future."
-
-The application lets you create, join, and leave the conference with enabled audio. You can also see the participants list. The final application will look like the following: 
+The application lets you create, join, and leave the conference with enabled audio and video. You can also see the participants list. The final application will look like the following: 
 
 <p align="center">
-<img src="/assets/flutter-getting-started-join.png" alt="Dolby.io Flutter Application" title="Flutter-Getting-Started-Join" width="200"/>
+<img src="/assets/flutter-getting-started-app-join.png" alt="Dolby.io Flutter Application" title="Flutter-Getting-Started-Join" width="200"/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="/assets/flutter-getting-started-in-conference.png" alt="Dolby.io Flutter Application" title="Flutter-Getting-Started-in-Conference" width="200"/>
+<img src="/assets/flutter-getting-started-app-in-conference.png" alt="Dolby.io Flutter Application" title="Flutter-Getting-Started-in-Conference" width="200"/>
 </p>
 
 
@@ -37,7 +35,7 @@ For more information about iOS SDK and Android SDK requirements, see the [Suppor
 
 # Build the application
 
-Each step in this guide focuses on an important component of a basic **audio-only** conference application. You can either follow along by starting from the boiler plate code in the root of the project or start with the final full source code listing and read the explanations below to understand how it works.
+Each step in this guide focuses on an important component of a basic conference application. You can either follow along by starting from the boiler plate code in the root of the project or start with the final full source code listing and read the explanations below to understand how it works.
 
 ## 0. Create a new project
 
@@ -119,8 +117,10 @@ Open the `lib/main.dart` file in your favorite text editor and replace its conte
 ```dart
 // Step 2: Import the permission handler package
 // Step 3: Import the Dolby.io Communications SDK for Flutter
+
 import 'package:flutter/material.dart';
- 
+import 'package:collection/collection.dart';
+import 'dart:async';
 import 'dart:math';
 import 'dart:core';
 import 'dart:developer' as developer;
@@ -151,7 +151,9 @@ class _FlutterScreenState extends State<FlutterScreen> {
   bool isInitializedList = false;
  
   // Step 7: Store the participants list here
- 
+
+  // Step 7: Define StreamSubscriptions here
+
   @override
   void initState() {
     super.initState();
@@ -161,97 +163,71 @@ class _FlutterScreenState extends State<FlutterScreen> {
     // Step 3: Call initializeSdk()
 
     // Step 4: Call openSession()
- 
-    // Step 7: Call updateParticipantsList()
+
+    // Step 7: Call updateParticipantsList() with StreamSubscriptions
   }
- 
+
+  // Step 7: Cancel StreamSubscriptions
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter SDK'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!isInitializedList) ...[
-              Expanded(
-                  flex: 2,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: usernameController,
-                          readOnly: true,
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          decoration: const InputDecoration(hintText: 'Conference name'),
-                          controller: conferenceNameController,
-                        ),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
+        appBar: AppBar(title: const Text('Flutter SDK'), centerTitle: true),
+        body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: !isInitializedList
+                ? Column(
+                    children: [
+                      TextField(controller: usernameController, readOnly: true),
+                      const SizedBox(height: 12),
+                      TextField(
+                          decoration: const InputDecoration(
+                            hintText: 'Conference name'),
+                          controller: conferenceNameController),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
                           onPressed: () async {
                             // Step 5: Call joinConference()
-                          },
-                          child: isJoining
-                            ? const Text('Joining...')
-                            : const Text('Join the conference'),
-                        ),
-                      ],
-                    ),
-                  )),
-              const Divider(
-                thickness: 2,
-              ),
-            ],
-            Expanded(
-                flex: 5,
-                child: isInitializedList
-                    ? Column(children: [
-                        Text(
-                          'Conference name: ${conferenceNameController.text}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'List of participants:',
+                          }, 
+                          child: isJoining 
+                              ? const Text('Joining...') 
+                              : const Text('Join the conference')), 
+                      const Divider(thickness: 2),
+                      const Text(
+                          "Join the conference to see the list of participants.")
+                    ],
+                  )
+                : Column(children: [
+                  Text('Conference name: ${conferenceNameController.text}', 
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w400, fontSize: 16)), 
+                  const SizedBox(height: 16),
+                  Expanded(
+                    child: Column(children: [
+                      const Align(
+                          alignment: Alignment.centerLeft, 
+                          child: Text('List of participants:', 
                               style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                        const SizedBox(
-                          height: 16,
-                        ),
-
-                        // Step 7: Display the list of participants
-
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
-                          onPressed: () async {
-                            // Step 6: Call leaveConference()
-                          },
-                          child: isLeaving
-                            ? const Text('Leaving...')
-                            : const Text('Leave the conference'),
-                        )
-                      ])
-                    : const Center(child: Text("Join the conference to see the list of participants.")))
-          ],
-        ),
-      ),
-    );
+                                  color: Colors.blue, 
+                                  fontWeight: FontWeight.w600))), 
+                      const SizedBox(height: 16),
+                      
+                      // Step 7: Display the list of participants
+                    
+                    ]),
+                  ), 
+              
+                  const SizedBox(height: 16), 
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Colors.red), 
+                      onPressed: () async {
+                        // Step 6: Call leaveConference()
+                        }, 
+                      child: isJoining 
+                          ? const Text('Leaving...') 
+                          : const Text('Leave the conference'))
+                ])
+        ));
   }
  
   // Step 3: Define the initializeSdk function
@@ -436,8 +412,8 @@ Future<void> leaveConference() async {
 
   await dolbyioCommsSdk.conference.leave(options: null);
   
-  setState(() => isInitializedList = true);
-  setState(() => isLeaving = true);
+  setState(() => isInitializedList = false);
+  setState(() => isLeaving = false);
 }
 ```
 
@@ -453,7 +429,7 @@ await leaveConference();
 > Step 7 - Add the participants list to the layout
 > * Create a variable for storing the list of participants
 > * Add the participants list to the layout
-> * Listen to the changes on the list of participants using the **updateParticipantsList()** method
+> * Listen to the changes on the list of participants using the **updateParticipantsList()** method with StreamSubscriptions
 
 First, create a variable in the **_FlutterScreenState** class for storing the list of participants.
 
@@ -466,52 +442,102 @@ Then, define how you want to present the list of participants in the UI by addin
 
 ```dart
 // Step 7: Display the list of participants
-Material(
-  elevation: 8,
-  child: ListView.builder(
-    shrinkWrap: true,
-    itemCount: participants.length,
-    itemBuilder: (context, index) {
-      return ListTile(
-        title: Text("${participants[index].info!.name} (${participants[index].status?.name})"),
-        leading: const Icon(
-          Icons.person,
-          color: Colors.black,
+Expanded(
+  child: ListView.separated(
+    separatorBuilder: (BuildContext context, int index) {
+    return const SizedBox(height: 5);
+  },
+  shrinkWrap: true,
+  itemCount: participants.length,
+  itemBuilder: (context, index) {
+    var participant = participants[index];
+    return Padding(
+      padding: const EdgeInsets.all(4),
+      child: Row(children: [
+        Expanded(
+          flex: 1,
+          child: SizedBox(
+            height: 150,
+            width: 150,
+            child: VideoView.withMediaStream(
+              participant: participant,
+              mediaStream: participant.streams?.firstWhereOrNull((s) =>
+                s.type == MediaStreamType.camera),
+              key: ValueKey('video_view_tile_${participant.id}')))),
+        Expanded(
+          flex: 1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("${participant.info?.name.toString()}"),
+              Text("status: ${participant.status?.name}")
+            ]),
         ),
-      );
-    },
-  ),
+      ]),
+    );
+  }),
 ),
 ```
 
-After joining a conference, the application must listen to changes on the list of participants to update the UI. To update the participants list, define the **updateParticipantsList** method at the end of the class:
+After joining a conference, the application must listen to changes on the list of participants to update the UI. To listen to the changes, define the **onParticipantsChangeSubscription** and **onStreamsChangeSubscription** in the **initState()** method:
+
+```dart
+// Step 7: Define StreamSubscriptions
+StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
+  onParticipantsChangeSubscription;
+StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>?
+  onStreamsChangeSubscription;
+```
+
+These StreamSubscriptions should be canceled when the widget is destroyed. Define the **dispose()** method after the **initState()** method:
+```dart
+// Step 7: Cancel StreamSubscriptions
+@override
+void dispose() {
+  onParticipantsChangeSubscription?.cancel();
+  onStreamsChangeSubscription?.cancel();
+  super.dispose();
+}
+```
+
+To update the participants list, define the **updateParticipantsList()** method at the end of the class:
 
 ```dart
 // Step 7: Define the updateParticipantsList method
-void updateParticipantsList() {
-  dolbyioCommsSdk.conference.onParticipantsChange()
-    .listen((params) async {
-      try {
-        var conference = await dolbyioCommsSdk.conference.current();
-        var participantsList = await dolbyioCommsSdk.conference.getParticipants(conference);
-        
-        setState(() => participants = participantsList);
-        setState(() => isInitializedList = true);
-      } catch (error) {
-        developer.log("Error during initializing participant list.", error: error);
-      }
+Future<void> updateParticipantsList() async {
+  try {
+    var conference = await dolbyioCommsSdk.conference.current();
+    var participantsList =
+    await dolbyioCommsSdk.conference.getParticipants(conference);
+    final availableParticipants = participantsList
+        .where((element) => element.status != ParticipantStatus.left);
+
+    setState(() {
+      participants = availableParticipants.toList();
+      isInitializedList = true;
     });
+  } catch (error) {
+    developer.log("Error during initializing participant list.", error: error);
+  }
 }
 ```
 
 Call the created function by adding the following code after opening the session, in the **initState()** method.
 
 ```dart
-// Step 7: Call updateParticipantsList()
-updateParticipantsList();
+// Step 7: Call updateParticipantsList() with StreamSubscriptions
+onParticipantsChangeSubscription =
+    dolbyioCommsSdk.conference.onParticipantsChange().listen((params) {
+      updateParticipantsList();
+});
+
+onStreamsChangeSubscription =
+    dolbyioCommsSdk.conference.onStreamsChange().listen((params) {
+      updateParticipantsList();
+});
 ```
 
-At this stage, your basic application should be ready. You should be able to join a conference, see participants and their statuses, and leave the conference.
+At this stage, your basic application should be ready. You should be able to join a conference, see participants, their names and statuses, and leave the conference.
 
 # Run the application
 
