@@ -1,9 +1,5 @@
 # Dolby.io Communications SDK for Flutter - Getting Started
 
-🚀 SDK Beta
-
-The Flutter SDK is a part of the [Beta Program](https://docs.dolby.io/communications-apis/docs/overview-beta-programs).
-
 This guide explains how to create a basic audio and video conference application for mobile devices using the Dolby.io Communications SDK for Flutter. This starter project provides the foundation upon which you can add additional features as you build out your own solutions for events, collaboration, education, or live streaming. 
 
 The application lets you create, join, and leave the conference with enabled audio and video. You can also see the participants list. The final application will look like the following: 
