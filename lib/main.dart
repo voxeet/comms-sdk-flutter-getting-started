@@ -243,7 +243,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
     try {
       var conference = await dolbyioCommsSdk.conference.current();
       var participantsList = await dolbyioCommsSdk.conference.getParticipants(conference);
-      final availableParticipants = participantsList .where((element) => element.status != ParticipantStatus.left);
+      final availableParticipants = participantsList.where((element) => element.status != ParticipantStatus.left);
 
       setState(() {
         participants = availableParticipants.toList();
