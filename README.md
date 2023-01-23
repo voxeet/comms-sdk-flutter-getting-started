@@ -53,11 +53,12 @@ cd dolbyio_getting_started
 ```
 
 Add the following package dependencies to the project:
-- Dolby.io Communications SDK for Flutter
+- [Dolby.io Communications SDK for Flutter](https://github.com/DolbyIO/comms-sdk-flutter)
 - The **permission_handler** that allows requesting all required permissions for iOS and Android
+- The **collection** that allows manipulating collections
 
 ```shell
-flutter pub add dolbyio_comms_sdk_flutter permission_handler
+flutter pub add dolbyio_comms_sdk_flutter permission_handler collection
 ```
 
 Download and install all dependencies, including iOS and Android SDK binaries:
@@ -366,7 +367,7 @@ Future<void> joinConference() async {
   // Create conference options
   var params = ConferenceCreateParameters();
   params.dolbyVoice = true;
-  var createOptions = ConferenceCreateOption(conferenceNameController.text, params, 0);
+  var createOptions = ConferenceCreateOption(conferenceNameController.text, params, 0, SpatialAudioStyle.disabled);
 
   // Join the conference with audio and video
   var joinOptions = ConferenceJoinOptions();
