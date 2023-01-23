@@ -209,7 +209,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
     // Create conference options
     var params = ConferenceCreateParameters();
     params.dolbyVoice = true;
-    var createOptions = ConferenceCreateOption(conferenceNameController.text, params, 0);
+    var createOptions = ConferenceCreateOption(conferenceNameController.text, params, 0, SpatialAudioStyle.disabled);
 
     // Join the conference with audio and video
     var joinOptions = ConferenceJoinOptions();
@@ -242,10 +242,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
   Future<void> updateParticipantsList() async {
     try {
       var conference = await dolbyioCommsSdk.conference.current();
-      var participantsList =
-          await dolbyioCommsSdk.conference.getParticipants(conference);
-      final availableParticipants = participantsList
-          .where((element) => element.status != ParticipantStatus.left);
+      var participantsList = await dolbyioCommsSdk.conference.getParticipants(conference);
+      final availableParticipants = participantsList.where((element) => element.status != ParticipantStatus.left);
 
       setState(() {
         participants = availableParticipants.toList();
