@@ -1,3 +1,5 @@
+# :warning: This repository is no longer maintained :warning:
+
 # Dolby.io Communications SDK for Flutter - Getting Started
 
 This guide explains how to create a basic audio and video conference application for mobile devices using the Dolby.io Communications SDK for Flutter. This starter project provides the foundation upon which you can add additional features as you build out your own solutions for events, collaboration, education, or live streaming. 
